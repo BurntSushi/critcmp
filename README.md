@@ -27,6 +27,69 @@ Criterion, which means this tool can break at any point if Criterion's internal
 data format changes.
 
 
+### Usage
+
+critcmp works by slurping up all benchmark data from Criterion's target
+directory, in addition to extra data supplied as positional parameters. The
+primary unit that critcmp works with is Criterion's baselines. That is, the
+simplest way to use critcmp is to save two baselines with Criterion's benchmark
+harness and then compare them. For example:
+
+    $ cargo bench -- --save-baseline before
+    $ cargo bench -- --save-baseline change
+    $ critcmp before change
+
+Filtering can be done with the -f/--filter flag to limit comparisons based on
+a regex:
+
+    $ critcmp before change -f 'foo.*bar'
+
+Comparisons with very small differences can also be filtered out. For example,
+this hides comparisons with differences of 5% or less
+
+    $ critcmp before change -t 5
+
+Comparisons are not limited to only two baselines. Many can be used:
+
+    $ critcmp before change1 change2
+
+The list of available baselines known to critcmp can be printed:
+
+    $ critcmp --baselines
+
+A baseline can exported to one JSON file for more permanent storage outside
+of Criterion's target directory:
+
+    $ critcmp --export before > before.json
+    $ critcmp --export change > change.json
+
+Baselines saved this way can be used by simply using their file path instead
+of just the name:
+
+    $ critcmp before.json change.json
+
+Benchmarks within the same baseline can be compared as well. Normally,
+benchmarks are compared based on their name. That is, given two baselines, the
+correspondence between benchmarks is established by their name. Sometimes,
+however, you'll want to compare benchmarks that don't have the same name. This
+can be done by expressing the matching criteria via a regex. For example, given
+benchmarks 'optimized/input1' and 'naive/input1' in the baseline 'benches', the
+following will show a comparison between the two benchmarks despite the fact
+that they have different names:
+
+    $ critcmp benches -g '\\w+/(input1)'
+
+That is, the matching criteria is determined by the values matched by all of
+the capturing groups in the regex. All benchmarks with equivalent capturing
+groups will be included in one comparison. There is no limit on the number of
+benchmarks that can appear in a single comparison.
+
+Finally, if comparisons grow too large to see in the default column oriented
+display, then the results can be flattened into lists:
+
+    $ critcmp before change1 change2 change3 change4 change5 --list
+
+
 ### Motivation
 
 This tool is similar to
