@@ -97,9 +97,9 @@ This tool is similar to
 but it works on data gathered by Criterion.
 
 In particular, Criterion emits loads of useful data, but its facilities for
-comparing benchmarks and analyzing benchmarks in the aggregate are exceedingly
-limited. Criterion does provide the ability to save benchmark results as a
-"baseline," and this is primarily the data with which critcmp works with. In
-particular, while Criterion will show changes between a saved baseline and the
-current benchmark, there is no way to do further comparative analysis by
-looking at benchmark results in different views.
+interactively comparing benchmarks and analyzing benchmarks in the aggregate
+are exceedingly limited. Criterion does provide the ability to save benchmark
+results as a "baseline," and this is primarily the data with which critcmp
+works with. In particular, while Criterion will show changes between a saved
+baseline and the current benchmark, there is no way to do further comparative
+analysis by looking at benchmark results in different views.
