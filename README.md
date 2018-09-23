@@ -27,6 +27,11 @@ Criterion, which means this tool can break at any point if Criterion's internal
 data format changes.
 
 
+### Example
+
+[![A screenshot of a critcmp example](https://burntsushi.net/stuff/critcmp.png)](https://burntsushi.net/stuff/critcmp.png)
+
+
 ### Usage
 
 critcmp works by slurping up all benchmark data from Criterion's target
