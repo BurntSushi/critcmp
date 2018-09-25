@@ -42,7 +42,7 @@ pub struct CBenchmark {
 #[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(rename_all = "PascalCase")]
 pub struct CThroughput {
-    pub bytes: u64,
+    pub bytes: Option<u64>,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -169,8 +169,9 @@ impl Benchmark {
         self.info
             .throughput
             .as_ref()
-            .map(|t| {
-                t.bytes as f64 * (NANOS_PER_SECOND / self.nanoseconds())
+            .and_then(|t| t.bytes)
+            .map(|bytes| {
+                bytes as f64 * (NANOS_PER_SECOND / self.nanoseconds())
             })
     }
 }
