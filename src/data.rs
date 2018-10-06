@@ -3,6 +3,7 @@ use std::fs::File;
 use std::io;
 use std::path::Path;
 
+use serde::de::DeserializeOwned;
 use serde_json as json;
 use walkdir::WalkDir;
 
@@ -32,7 +33,7 @@ pub struct Benchmark {
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct CBenchmark {
     pub group_id: String,
-    pub function_id: String,
+    pub function_id: Option<String>,
     pub value_str: Option<String>,
     pub throughput: Option<CThroughput>,
     pub full_id: String,
@@ -98,7 +99,11 @@ impl Benchmark {
     fn from_path<P: AsRef<Path>>(path: P) -> Result<Option<Benchmark>> {
         let path = path.as_ref();
         Benchmark::from_path_imp(path).map_err(|err| {
-            From::from(format!("{}: {}", path.display(), err))
+            if let Some(parent) = path.parent() {
+                err!("{}: {}", parent.display(), err)
+            } else {
+                err!("unknown path: {}", err)
+            }
         })
     }
 
@@ -178,24 +183,37 @@ impl Benchmark {
 
 impl BaseBenchmarks {
     pub fn from_path<P: AsRef<Path>>(path: P) -> Result<BaseBenchmarks> {
-        let file = io::BufReader::new(File::open(path)?);
-        let b = json::from_reader(file)?;
-        Ok(b)
+        deserialize_json_path(path.as_ref())
     }
 }
 
 impl CBenchmark {
     fn from_path<P: AsRef<Path>>(path: P) -> Result<CBenchmark> {
-        let file = io::BufReader::new(File::open(path)?);
-        let b = json::from_reader(file)?;
-        Ok(b)
+        deserialize_json_path(path.as_ref())
     }
 }
 
 impl CEstimates {
     fn from_path<P: AsRef<Path>>(path: P) -> Result<CEstimates> {
-        let file = io::BufReader::new(File::open(path)?);
-        let b = json::from_reader(file)?;
-        Ok(b)
+        deserialize_json_path(path.as_ref())
     }
+}
+
+fn deserialize_json_path<D: DeserializeOwned>(path: &Path) -> Result<D> {
+    let file = File::open(path).map_err(|err| {
+        if let Some(name) = path.file_name().and_then(|n| n.to_str()) {
+            err!("{}: {}", name, err)
+        } else {
+            err!("{}: {}", path.display(), err)
+        }
+    })?;
+    let buf = io::BufReader::new(file);
+    let b = json::from_reader(buf).map_err(|err| {
+        if let Some(name) = path.file_name().and_then(|n| n.to_str()) {
+            err!("{}: {}", name, err)
+        } else {
+            err!("{}: {}", path.display(), err)
+        }
+    })?;
+    Ok(b)
 }
