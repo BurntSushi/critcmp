@@ -87,7 +87,7 @@ benchmarks 'optimized/input1' and 'naive/input1' in the baseline 'benches', the
 following will show a comparison between the two benchmarks despite the fact
 that they have different names:
 
-    $ critcmp benches -g '\\w+/(input1)'
+    $ critcmp benches -g '\w+/(input1)'
 
 That is, the matching criteria is determined by the values matched by all of
 the capturing groups in the regex. All benchmarks with equivalent capturing
