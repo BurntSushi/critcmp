@@ -4,7 +4,7 @@ rust:
   - nightly
   - beta
   - stable
-  - 1.29.0
+  - 1.35.0
 script: ci/script.sh
 branches:
   only:
