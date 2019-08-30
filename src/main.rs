@@ -1,16 +1,3 @@
-#[macro_use]
-extern crate clap;
-extern crate grep_cli;
-extern crate regex;
-extern crate serde;
-#[macro_use]
-extern crate serde_derive;
-extern crate serde_json;
-extern crate tabwriter;
-extern crate termcolor;
-extern crate unicode_width;
-extern crate walkdir;
-
 use std::collections::BTreeMap;
 use std::error::Error;
 use std::io::{self, Write};

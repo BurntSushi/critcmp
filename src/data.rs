@@ -4,6 +4,7 @@ use std::io;
 use std::path::Path;
 
 use serde::de::DeserializeOwned;
+use serde::{Deserialize, Serialize};
 use serde_json as json;
 use walkdir::WalkDir;
 

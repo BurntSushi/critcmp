@@ -17,8 +17,7 @@ edition = "2018"
 grep-cli = "0.1"
 lazy_static = "1.1"
 regex = "1"
-serde = "1"
-serde_derive = "1"
+serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 tabwriter = { version = "1", features = ["ansi_formatting"] }
 termcolor = "1"

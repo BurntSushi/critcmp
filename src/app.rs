@@ -3,7 +3,7 @@ use std::fs;
 use std::io;
 use std::path::{Path, PathBuf};
 
-use clap::{App, AppSettings, Arg, ArgMatches};
+use clap::{crate_authors, crate_version, App, AppSettings, Arg, ArgMatches};
 use grep_cli as cli;
 use regex::Regex;
 use tabwriter::TabWriter;
