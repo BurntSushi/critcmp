@@ -26,7 +26,7 @@ critcmp's minimum supported Rust version is the current stable release.
 Criterion, which means this tool can break at any point if Criterion's internal
 data format changes.
 
-critcmp is known to work with **Criterion 0.2.5**. This project will
+critcmp is known to work with **Criterion 0.3.0**. This project will
 track the latest release of Criterion if breaking changes to Criterion's
 internal format occur, but will also attempt to keep working on older versions
 within reason.
