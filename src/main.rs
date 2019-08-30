@@ -19,11 +19,11 @@ use std::result;
 
 use regex::Regex;
 
-use app::Args;
-use data::{Benchmarks, Benchmark};
+use crate::app::Args;
+use crate::data::{Benchmarks, Benchmark};
 
 macro_rules! err {
-    ($($tt:tt)*) => { Box::<::std::error::Error>::from(format!($($tt)*)); }
+    ($($tt:tt)*) => { Box::<dyn (::std::error::Error)>::from(format!($($tt)*)); }
 }
 
 macro_rules! fail {
@@ -34,7 +34,7 @@ mod app;
 mod data;
 mod output;
 
-type Result<T> = result::Result<T, Box<Error>>;
+type Result<T> = result::Result<T, Box<dyn Error>>;
 
 fn main() {
     if let Err(err) = try_main() {

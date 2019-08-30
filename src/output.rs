@@ -4,8 +4,8 @@ use std::iter;
 use termcolor::{Color, ColorSpec, WriteColor};
 use unicode_width::UnicodeWidthStr;
 
-use data;
-use Result;
+use crate::data;
+use crate::Result;
 
 #[derive(Clone, Debug)]
 pub struct Comparison {

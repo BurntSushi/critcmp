@@ -7,7 +7,7 @@ use serde::de::DeserializeOwned;
 use serde_json as json;
 use walkdir::WalkDir;
 
-use Result;
+use crate::Result;
 
 #[derive(Clone, Debug, Default)]
 pub struct Benchmarks {

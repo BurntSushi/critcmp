@@ -11,6 +11,7 @@ repository = "https://github.com/BurntSushi/critcmp"
 readme = "README.md"
 keywords = ["benchmark", "benchcmp", "compare", "cmp"]
 license = "Unlicense/MIT"
+edition = "2018"
 
 [dependencies]
 grep-cli = "0.1"

@@ -9,8 +9,8 @@ use regex::Regex;
 use tabwriter::TabWriter;
 use termcolor::{self, WriteColor};
 
-use data::{BaseBenchmarks, Benchmarks};
-use Result;
+use crate::data::{BaseBenchmarks, Benchmarks};
+use crate::Result;
 
 const TEMPLATE: &'static str = "\
 {bin} {version}
@@ -209,7 +209,7 @@ impl Args {
         Ok(crit_dir)
     }
 
-    pub fn stdout(&self) -> Box<WriteColor> {
+    pub fn stdout(&self) -> Box<dyn WriteColor> {
         let choice = self.0.value_of("color").unwrap();
         if choice == "always" || (choice == "auto" && cli::is_tty_stdout()) {
             Box::new(termcolor::Ansi::new(TabWriter::new(io::stdout())))
