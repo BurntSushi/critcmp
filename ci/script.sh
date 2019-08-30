@@ -6,3 +6,8 @@ set -ex
 
 cargo build --verbose
 cargo test --verbose
+
+if [ "$TRAVIS_RUST_VERSION" = "stable" ]; then
+  rustup component add rustfmt
+  cargo fmt -- --check
+fi

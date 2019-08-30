@@ -64,9 +64,7 @@ impl Comparison {
     }
 
     fn get(&self, name: &str) -> Option<&Benchmark> {
-        self.name_to_index
-            .get(name)
-            .and_then(|&i| self.benchmarks.get(i))
+        self.name_to_index.get(name).and_then(|&i| self.benchmarks.get(i))
     }
 }
 
@@ -147,10 +145,7 @@ pub fn columns<W: WriteColor>(
     Ok(())
 }
 
-pub fn rows<W: WriteColor>(
-    mut wtr: W,
-    groups: &[Comparison],
-) -> Result<()> {
+pub fn rows<W: WriteColor>(mut wtr: W, groups: &[Comparison]) -> Result<()> {
     for (i, group) in groups.iter().enumerate() {
         if i > 0 {
             writeln!(wtr, "")?;
@@ -198,16 +193,15 @@ fn time(nanos: f64, stddev: Option<f64>) -> String {
     const MIN_MILLI: f64 = 2_000_000.0;
     const MIN_SEC: f64 = 2_000_000_000.0;
 
-    let (div, label) =
-        if nanos < MIN_MICRO {
-            (1.0, "ns")
-        } else if nanos < MIN_MILLI {
-            (1_000.0, "µs")
-        } else if nanos < MIN_SEC {
-            (1_000_000.0, "ms")
-        } else {
-            (1_000_000_000.0, "s")
-        };
+    let (div, label) = if nanos < MIN_MICRO {
+        (1.0, "ns")
+    } else if nanos < MIN_MILLI {
+        (1_000.0, "µs")
+    } else if nanos < MIN_SEC {
+        (1_000_000.0, "ms")
+    } else {
+        (1_000_000_000.0, "s")
+    };
     if let Some(stddev) = stddev {
         format!("{:.1}±{:.2}{}", nanos / div, stddev / div, label)
     } else {
@@ -216,9 +210,9 @@ fn time(nanos: f64, stddev: Option<f64>) -> String {
 }
 
 fn throughput(bytes_per_second: Option<f64>) -> String {
-    const MIN_KB: f64 = (2 * (1<<10) as u64) as f64;
-    const MIN_MB: f64 = (2 * (1<<20) as u64) as f64;
-    const MIN_GB: f64 = (2 * (1<<30) as u64) as f64;
+    const MIN_KB: f64 = (2 * (1 << 10) as u64) as f64;
+    const MIN_MB: f64 = (2 * (1 << 20) as u64) as f64;
+    const MIN_GB: f64 = (2 * (1 << 30) as u64) as f64;
 
     let per = match bytes_per_second {
         None => return "? B/sec".to_string(),
@@ -227,10 +221,10 @@ fn throughput(bytes_per_second: Option<f64>) -> String {
     if per < MIN_KB {
         format!("{} B/sec", per as u64)
     } else if per < MIN_MB {
-        format!("{:.1} KB/sec", (per / (1<<10) as f64))
+        format!("{:.1} KB/sec", (per / (1 << 10) as f64))
     } else if per < MIN_GB {
-        format!("{:.1} MB/sec", (per / (1<<20) as f64))
+        format!("{:.1} MB/sec", (per / (1 << 20) as f64))
     } else {
-        format!("{:.1} GB/sec", (per / (1<<30) as f64))
+        format!("{:.1} GB/sec", (per / (1 << 30) as f64))
     }
 }

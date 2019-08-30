@@ -110,9 +110,8 @@ impl Args {
             for arg in args {
                 let p = Path::new(arg);
                 if p.is_file() {
-                    let baseb = BaseBenchmarks::from_path(p).map_err(|err| {
-                        format!("{}: {}", p.display(), err)
-                    })?;
+                    let baseb = BaseBenchmarks::from_path(p)
+                        .map_err(|err| format!("{}: {}", p.display(), err))?;
                     whitelist.insert(baseb.name.clone());
                     from_cli.push(baseb);
                 } else {
@@ -169,9 +168,12 @@ impl Args {
         let pattern = cli::pattern_from_os(pattern_os)?;
         let re = Regex::new(pattern)?;
         if re.captures_len() <= 1 {
-            fail!("pattern '{}' has no capturing groups, by grouping \
-                   benchmarks by a regex requires the use of at least \
-                   one capturing group", pattern);
+            fail!(
+                "pattern '{}' has no capturing groups, by grouping \
+                 benchmarks by a regex requires the use of at least \
+                 one capturing group",
+                pattern
+            );
         }
         Ok(Some(re))
     }
@@ -200,11 +202,14 @@ impl Args {
         let target_dir = self.target_dir()?;
         let crit_dir = target_dir.join("criterion");
         if !crit_dir.exists() {
-            fail!("\
-                no criterion data exists at {}\n\
-                set a different target directory with --target-dir or \
-                set CARGO_TARGET_DIR\
-            ", crit_dir.display());
+            fail!(
+                "\
+                 no criterion data exists at {}\n\
+                 set a different target directory with --target-dir or \
+                 set CARGO_TARGET_DIR\
+                 ",
+                crit_dir.display()
+            );
         }
         Ok(crit_dir)
     }
@@ -232,10 +237,12 @@ impl Args {
             cwd = match cwd.parent() {
                 Some(p) => p.to_path_buf(),
                 None => {
-                    fail!("\
-                        could not find Criterion output directory\n\
-                        try using --target-dir or set CARGO_TARGET_DIR\
-                    ");
+                    fail!(
+                        "\
+                         could not find Criterion output directory\n\
+                         try using --target-dir or set CARGO_TARGET_DIR\
+                         "
+                    );
                 }
             }
         }

@@ -20,7 +20,7 @@ use std::result;
 use regex::Regex;
 
 use crate::app::Args;
-use crate::data::{Benchmarks, Benchmark};
+use crate::data::{Benchmark, Benchmarks};
 
 macro_rules! err {
     ($($tt:tt)*) => { Box::<dyn (::std::error::Error)>::from(format!($($tt)*)); }
@@ -126,12 +126,9 @@ fn group_by_regex(
                 None => continue,
                 Some((bench, cmp)) => (bench, cmp),
             };
-            let output_benchmark = output::Benchmark::from_data(benchmark)
-                .name(&bench);
-            byname
-                .entry(cmp)
-                .or_insert(vec![])
-                .push(output_benchmark);
+            let output_benchmark =
+                output::Benchmark::from_data(benchmark).name(&bench);
+            byname.entry(cmp).or_insert(vec![]).push(output_benchmark);
         }
     }
     byname

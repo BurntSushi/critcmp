@@ -82,11 +82,9 @@ impl Benchmarks {
             benchmarks
                 .by_baseline
                 .entry(b.baseline.clone())
-                .or_insert_with(|| {
-                    BaseBenchmarks {
-                        name: b.baseline.clone(),
-                        benchmarks: BTreeMap::new(),
-                    }
+                .or_insert_with(|| BaseBenchmarks {
+                    name: b.baseline.clone(),
+                    benchmarks: BTreeMap::new(),
                 })
                 .benchmarks
                 .insert(b.benchmark_name().to_string(), b);
@@ -124,11 +122,9 @@ impl Benchmark {
         // `benchmark.json` which contains most of the info we need about
         // a benchmark, including its name. From the path, we only extract the
         // baseline name.
-        let parent = path
-            .parent()
-            .ok_or_else(|| {
-                err!("{}: could not find parent dir", path.display())
-            })?;
+        let parent = path.parent().ok_or_else(|| {
+            err!("{}: could not find parent dir", path.display())
+        })?;
         let baseline = parent
             .file_name()
             .map(|p| p.to_string_lossy().into_owned())
@@ -171,13 +167,9 @@ impl Benchmark {
     pub fn bytes_per_second(&self) -> Option<f64> {
         const NANOS_PER_SECOND: f64 = 1_000_000_000.0;
 
-        self.info
-            .throughput
-            .as_ref()
-            .and_then(|t| t.bytes)
-            .map(|bytes| {
-                bytes as f64 * (NANOS_PER_SECOND / self.nanoseconds())
-            })
+        self.info.throughput.as_ref().and_then(|t| t.bytes).map(|bytes| {
+            bytes as f64 * (NANOS_PER_SECOND / self.nanoseconds())
+        })
     }
 }
 
