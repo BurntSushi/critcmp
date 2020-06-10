@@ -19,7 +19,7 @@ pub struct Benchmark {
     name: String,
     nanoseconds: f64,
     stddev: Option<f64>,
-    bytes_per_second: Option<f64>,
+    throughput: Option<data::Throughput>,
     /// Whether this is the best benchmark in a group. This is only populated
     /// when a `Comparison` is built.
     best: bool,
@@ -74,7 +74,7 @@ impl Benchmark {
             name: b.fullname().to_string(),
             nanoseconds: b.nanoseconds(),
             stddev: Some(b.stddev()),
-            bytes_per_second: b.bytes_per_second(),
+            throughput: b.throughput(),
             best: false,
             rank: 0.0,
         }
@@ -134,7 +134,7 @@ pub fn columns<W: WriteColor>(
                 "\t  {:<5.2} {:>14} {:>14}",
                 b.rank,
                 time(b.nanoseconds, b.stddev),
-                throughput(b.bytes_per_second),
+                throughput(b.throughput),
             )?;
             if b.best {
                 wtr.reset()?;
@@ -172,7 +172,7 @@ fn rows_one<W: WriteColor>(mut wtr: W, group: &Comparison) -> Result<()> {
             b.name,
             b.rank,
             time(b.nanoseconds, b.stddev),
-            throughput(b.bytes_per_second),
+            throughput(b.throughput),
         )?;
     }
     Ok(())
@@ -209,22 +209,27 @@ fn time(nanos: f64, stddev: Option<f64>) -> String {
     }
 }
 
-fn throughput(bytes_per_second: Option<f64>) -> String {
-    const MIN_KB: f64 = (2 * (1 << 10) as u64) as f64;
-    const MIN_MB: f64 = (2 * (1 << 20) as u64) as f64;
-    const MIN_GB: f64 = (2 * (1 << 30) as u64) as f64;
+fn throughput(throughput: Option<data::Throughput>) -> String {
+    use data::Throughput::*;
+    match throughput {
+        Some(Bytes(num)) => throughput_per(num, "B"),
+        Some(Elements(num)) => throughput_per(num, "Elem"),
+        _ => "? ?/sec".to_string(),
+    }
+}
 
-    let per = match bytes_per_second {
-        None => return "? B/sec".to_string(),
-        Some(per) => per,
-    };
-    if per < MIN_KB {
-        format!("{} B/sec", per as u64)
-    } else if per < MIN_MB {
-        format!("{:.1} KB/sec", (per / (1 << 10) as f64))
-    } else if per < MIN_GB {
-        format!("{:.1} MB/sec", (per / (1 << 20) as f64))
+fn throughput_per(per: f64, unit: &str) -> String {
+    const MIN_K: f64 = (2 * (1 << 10) as u64) as f64;
+    const MIN_M: f64 = (2 * (1 << 20) as u64) as f64;
+    const MIN_G: f64 = (2 * (1 << 30) as u64) as f64;
+
+    if per < MIN_K {
+        format!("{} {}/sec", per as u64, unit)
+    } else if per < MIN_M {
+        format!("{:.1} K{}/sec", (per / (1 << 10) as f64), unit)
+    } else if per < MIN_G {
+        format!("{:.1} M{}/sec", (per / (1 << 20) as f64), unit)
     } else {
-        format!("{:.1} GB/sec", (per / (1 << 30) as f64))
+        format!("{:.1} G{}/sec", (per / (1 << 30) as f64), unit)
     }
 }
