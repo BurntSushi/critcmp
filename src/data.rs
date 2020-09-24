@@ -48,12 +48,11 @@ pub struct CThroughput {
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
-#[serde(rename_all = "PascalCase")]
 pub struct CEstimates {
     pub mean: CStats,
     pub median: CStats,
     pub median_abs_dev: CStats,
-    pub slope: CStats,
+    pub slope: Option<CStats>,
     pub std_dev: CStats,
 }
 
