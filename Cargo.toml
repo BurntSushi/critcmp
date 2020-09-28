@@ -13,6 +13,11 @@ keywords = ["benchmark", "benchcmp", "compare", "cmp"]
 license = "Unlicense/MIT"
 edition = "2018"
 
+[[bin]]
+bench = false
+path = "src/main.rs"
+name = "critcmp"
+
 [dependencies]
 grep-cli = "0.1"
 lazy_static = "1.1"
