@@ -21,6 +21,12 @@ pub struct BaseBenchmarks {
     pub benchmarks: BTreeMap<String, Benchmark>,
 }
 
+#[derive(Clone, Debug)]
+pub enum Throughput {
+    Bytes(f64),
+    Elements(f64),
+}
+
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct Benchmark {
     pub baseline: String,
@@ -42,9 +48,9 @@ pub struct CBenchmark {
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
-#[serde(rename_all = "PascalCase")]
-pub struct CThroughput {
-    pub bytes: Option<u64>,
+pub enum CThroughput {
+    Bytes(u64),
+    Elements(u64),
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -164,11 +170,16 @@ impl Benchmark {
         &self.info.full_id
     }
 
-    pub fn bytes_per_second(&self) -> Option<f64> {
+    pub fn throughput(&self) -> Option<Throughput> {
         const NANOS_PER_SECOND: f64 = 1_000_000_000.0;
-
-        self.info.throughput.as_ref().and_then(|t| t.bytes).map(|bytes| {
-            bytes as f64 * (NANOS_PER_SECOND / self.nanoseconds())
+        let per_second = NANOS_PER_SECOND / self.nanoseconds();
+        self.info.throughput.as_ref().map(|t| match t {
+            &CThroughput::Bytes(count) => {
+                Throughput::Bytes(count as f64 * per_second)
+            }
+            &CThroughput::Elements(count) => {
+                Throughput::Elements(count as f64 * per_second)
+            }
         })
     }
 }
