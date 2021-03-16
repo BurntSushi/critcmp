@@ -4,11 +4,10 @@ A command line tool to for comparing benchmarks run by Criterion. This supports
 comparing benchmarks both across and inside baselines, where a "baseline" is
 a collection of benchmark data produced by Criterion for a single run.
 
-[![](http://meritbadge.herokuapp.com/critcmp)](https://crates.io/crates/critcmp)
+[![](https://meritbadge.herokuapp.com/critcmp)](https://crates.io/crates/critcmp)
 [![Build status](https://github.com/BurntSushi/critcmp/workflows/ci/badge.svg)](https://github.com/BurntSushi/critcmp/actions)
-[![](http://meritbadge.herokuapp.com/snap)](https://crates.io/crates/critcmp)
 
-Dual-licensed under MIT or the [UNLICENSE](http://unlicense.org).
+Dual-licensed under MIT or the [UNLICENSE](https://unlicense.org/).
 
 
 ### Installation
