@@ -4,9 +4,9 @@ A command line tool to for comparing benchmarks run by Criterion. This supports
 comparing benchmarks both across and inside baselines, where a "baseline" is
 a collection of benchmark data produced by Criterion for a single run.
 
-[![Linux build status](https://api.travis-ci.org/BurntSushi/critcmp.svg)](https://travis-ci.org/BurntSushi/critcmp)
-[![Windows build status](https://ci.appveyor.com/api/projects/status/github/BurntSushi/critcmp?svg=true)](https://ci.appveyor.com/project/BurntSushi/critcmp)
 [![](http://meritbadge.herokuapp.com/critcmp)](https://crates.io/crates/critcmp)
+[![Build status](https://github.com/BurntSushi/critcmp/workflows/ci/badge.svg)](https://github.com/BurntSushi/critcmp/actions)
+[![](http://meritbadge.herokuapp.com/snap)](https://crates.io/crates/critcmp)
 
 Dual-licensed under MIT or the [UNLICENSE](http://unlicense.org).
 
@@ -26,7 +26,7 @@ critcmp's minimum supported Rust version is the current stable release.
 Criterion, which means this tool can break at any point if Criterion's internal
 data format changes.
 
-critcmp is known to work with **Criterion 0.3.0**. This project will
+critcmp is known to work with **Criterion 0.3.3**. This project will
 track the latest release of Criterion if breaking changes to Criterion's
 internal format occur, but will also attempt to keep working on older versions
 within reason.
