@@ -21,7 +21,7 @@ name = "critcmp"
 [dependencies]
 grep-cli = "0.1"
 lazy_static = "1.1"
-regex = "1"
+regex = { version = "1.4.5", default-features = false, features = ["std", "unicode"] }
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 tabwriter = { version = "1", features = ["ansi_formatting"] }
