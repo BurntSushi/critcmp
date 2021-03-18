@@ -45,6 +45,7 @@ pub struct CBenchmark {
 #[serde(rename_all = "PascalCase")]
 pub struct CThroughput {
     pub bytes: Option<u64>,
+    pub elements: Option<u64>,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -164,13 +165,27 @@ impl Benchmark {
         &self.info.full_id
     }
 
-    pub fn bytes_per_second(&self) -> Option<f64> {
+    pub fn throughput(&self) -> Option<Throughput> {
         const NANOS_PER_SECOND: f64 = 1_000_000_000.0;
 
-        self.info.throughput.as_ref().and_then(|t| t.bytes).map(|bytes| {
-            bytes as f64 * (NANOS_PER_SECOND / self.nanoseconds())
+        let scale = NANOS_PER_SECOND / self.nanoseconds();
+
+        self.info.throughput.as_ref().and_then(|t| {
+            if let Some(num) = t.bytes {
+                Some(Throughput::Bytes(num as f64 * scale))
+            } else if let Some(num) = t.elements {
+                Some(Throughput::Elements(num as f64 * scale))
+            } else {
+                None
+            }
         })
     }
+}
+
+#[derive(Clone, Copy, Debug)]
+pub enum Throughput {
+    Bytes(f64),
+    Elements(f64),
 }
 
 impl BaseBenchmarks {
