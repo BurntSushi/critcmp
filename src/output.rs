@@ -39,7 +39,9 @@ impl Comparison {
             return comp;
         }
 
-        comp.benchmarks.sort_by_key(|b| b.nanoseconds as u64);
+        comp.benchmarks.sort_by(|a, b| {
+            a.nanoseconds.partial_cmp(&b.nanoseconds).unwrap()
+        });
         comp.benchmarks[0].best = true;
 
         let top = comp.benchmarks[0].nanoseconds;
