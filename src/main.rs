@@ -10,11 +10,11 @@ use crate::app::Args;
 use crate::data::{Benchmark, Benchmarks};
 
 macro_rules! err {
-    ($($tt:tt)*) => { Box::<dyn (::std::error::Error)>::from(format!($($tt)*)); }
+    ($($tt:tt)*) => { Box::<dyn (::std::error::Error)>::from(format!($($tt)*)) }
 }
 
 macro_rules! fail {
-    ($($tt:tt)*) => { return Err(err!($($tt)*)); }
+    ($($tt:tt)*) => { return Err(err!($($tt)*)) }
 }
 
 mod app;
