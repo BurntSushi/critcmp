@@ -48,7 +48,7 @@ fn try_main() -> Result<()> {
             None => fail!("failed to find baseline '{}'", baseline),
         };
         serde_json::to_writer_pretty(&mut stdout, basedata)?;
-        writeln!(stdout, "")?;
+        writeln!(stdout)?;
         return Ok(());
     }
 
@@ -109,7 +109,7 @@ fn group_by_regex(
             if filter.map_or(false, |re| !re.is_match(name)) {
                 continue;
             }
-            let (bench, cmp) = match benchmark_names(&benchmark, group_by) {
+            let (bench, cmp) = match benchmark_names(benchmark, group_by) {
                 None => continue,
                 Some((bench, cmp)) => (bench, cmp),
             };

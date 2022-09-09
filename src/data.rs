@@ -170,13 +170,10 @@ impl Benchmark {
 
         let scale = NANOS_PER_SECOND / self.nanoseconds();
 
-        self.info.throughput.as_ref().and_then(|t| {
-            if let Some(num) = t.bytes {
-                Some(Throughput::Bytes(num as f64 * scale))
-            } else if let Some(num) = t.elements {
-                Some(Throughput::Elements(num as f64 * scale))
-            } else {
-                None
+        self.info.throughput.as_ref().and_then(|t| match t.bytes {
+            Some(num) => Some(Throughput::Bytes(num as f64 * scale)),
+            None => {
+                t.elements.map(|num| Throughput::Elements(num as f64 * scale))
             }
         })
     }

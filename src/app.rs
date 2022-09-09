@@ -12,7 +12,7 @@ use termcolor::{self, WriteColor};
 use crate::data::{BaseBenchmarks, Benchmarks};
 use crate::Result;
 
-const TEMPLATE: &'static str = "\
+const TEMPLATE: &str = "\
 {bin} {version}
 {author}
 {about}
@@ -26,7 +26,7 @@ SUBCOMMANDS:
 OPTIONS:
 {unified}";
 
-const ABOUT: &'static str = "
+const ABOUT: &str = "
 critcmp is a tool for comparing benchmark results produced by Criterion.
 
 critcmp works by slurping up all benchmark data from Criterion's target

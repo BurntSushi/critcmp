@@ -32,7 +32,7 @@ impl Comparison {
     pub fn new(name: &str, benchmarks: Vec<Benchmark>) -> Comparison {
         let mut comp = Comparison {
             name: name.to_string(),
-            benchmarks: benchmarks,
+            benchmarks,
             name_to_index: BTreeMap::new(),
         };
         if comp.benchmarks.is_empty() {
@@ -102,14 +102,14 @@ pub fn columns<W: WriteColor>(
     for column in &columns {
         write!(wtr, "\t  {}", column)?;
     }
-    writeln!(wtr, "")?;
+    writeln!(wtr)?;
 
     write_divider(&mut wtr, '-', "group".width())?;
     for column in &columns {
         write!(wtr, "\t  ")?;
         write_divider(&mut wtr, '-', column.width())?;
     }
-    writeln!(wtr, "")?;
+    writeln!(wtr)?;
 
     for group in groups {
         if group.benchmarks.is_empty() {
@@ -142,7 +142,7 @@ pub fn columns<W: WriteColor>(
                 wtr.reset()?;
             }
         }
-        writeln!(wtr, "")?;
+        writeln!(wtr)?;
     }
     Ok(())
 }
@@ -150,7 +150,7 @@ pub fn columns<W: WriteColor>(
 pub fn rows<W: WriteColor>(mut wtr: W, groups: &[Comparison]) -> Result<()> {
     for (i, group) in groups.iter().enumerate() {
         if i > 0 {
-            writeln!(wtr, "")?;
+            writeln!(wtr)?;
         }
         rows_one(&mut wtr, group)?;
     }
@@ -160,7 +160,7 @@ pub fn rows<W: WriteColor>(mut wtr: W, groups: &[Comparison]) -> Result<()> {
 fn rows_one<W: WriteColor>(mut wtr: W, group: &Comparison) -> Result<()> {
     writeln!(wtr, "{}", group.name)?;
     write_divider(&mut wtr, '-', group.name.width())?;
-    writeln!(wtr, "")?;
+    writeln!(wtr)?;
 
     if group.benchmarks.is_empty() {
         writeln!(wtr, "NOTHING TO SHOW")?;
