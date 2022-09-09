@@ -64,11 +64,13 @@ fn try_main() -> Result<()> {
         fail!("no benchmark comparisons to show");
     }
 
+    let format_time = !args.format_nanoseconds();
+
     let mut wtr = args.stdout();
     if args.list() {
-        output::rows(&mut wtr, &comps)?;
+        output::rows(&mut wtr, &comps, format_time)?;
     } else {
-        output::columns(&mut wtr, &comps)?;
+        output::columns(&mut wtr, &comps, format_time)?;
     }
     wtr.flush()?;
     Ok(())

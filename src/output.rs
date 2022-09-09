@@ -90,6 +90,7 @@ impl Benchmark {
 pub fn columns<W: WriteColor>(
     mut wtr: W,
     groups: &[Comparison],
+    format_time: bool,
 ) -> Result<()> {
     let mut columns = BTreeSet::new();
     for group in groups {
@@ -131,11 +132,18 @@ pub fn columns<W: WriteColor>(
                 spec.set_fg(Some(Color::Green)).set_bold(true);
                 wtr.set_color(&spec)?;
             }
+
+            let time = if format_time {
+                time(b.nanoseconds, b.stddev)
+            } else {
+                format!("{:.1}", b.nanoseconds)
+            };
+
             write!(
                 wtr,
                 "\t  {:<5.2} {:>14} {:>14}",
                 b.rank,
-                time(b.nanoseconds, b.stddev),
+                time,
                 throughput(b.throughput),
             )?;
             if b.best {
@@ -147,17 +155,26 @@ pub fn columns<W: WriteColor>(
     Ok(())
 }
 
-pub fn rows<W: WriteColor>(mut wtr: W, groups: &[Comparison]) -> Result<()> {
+pub fn rows<W: WriteColor>(
+    mut wtr: W,
+    groups: &[Comparison],
+    format_time: bool,
+) -> Result<()> {
     for (i, group) in groups.iter().enumerate() {
         if i > 0 {
             writeln!(wtr)?;
         }
-        rows_one(&mut wtr, group)?;
+
+        rows_one(&mut wtr, group, format_time)?;
     }
     Ok(())
 }
 
-fn rows_one<W: WriteColor>(mut wtr: W, group: &Comparison) -> Result<()> {
+fn rows_one<W: WriteColor>(
+    mut wtr: W,
+    group: &Comparison,
+    format_time: bool,
+) -> Result<()> {
     writeln!(wtr, "{}", group.name)?;
     write_divider(&mut wtr, '-', group.name.width())?;
     writeln!(wtr)?;
@@ -168,12 +185,18 @@ fn rows_one<W: WriteColor>(mut wtr: W, group: &Comparison) -> Result<()> {
     }
 
     for b in &group.benchmarks {
+        let time = if format_time {
+            time(b.nanoseconds, b.stddev)
+        } else {
+            format!("{:.1}", b.nanoseconds)
+        };
+
         writeln!(
             wtr,
             "{}\t{:>7.2}\t{:>15}\t{:>12}",
             b.name,
             b.rank,
-            time(b.nanoseconds, b.stddev),
+            time,
             throughput(b.throughput),
         )?;
     }

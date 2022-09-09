@@ -198,6 +198,10 @@ impl Args {
         self.0.value_of_lossy("export").map(|v| v.into_owned())
     }
 
+    pub fn format_nanoseconds(&self) -> bool {
+        self.0.is_present("nanoseconds")
+    }
+
     pub fn criterion_dir(&self) -> Result<PathBuf> {
         let target_dir = self.target_dir()?;
         let crit_dir = target_dir.join("criterion");
@@ -279,6 +283,9 @@ fn app() -> App<'static, 'static> {
             .help("Show each benchmark comparison as a list. This is useful \
                    when there are many comparisons for each benchmark such \
                    that they no longer fit in a column view."))
+        .arg(Arg::with_name("nanoseconds")
+           .long("nanoseconds")
+           .help("Output nanoseconds instead of converting it by default"))
         .arg(Arg::with_name("filter")
             .long("filter")
             .short("f")
