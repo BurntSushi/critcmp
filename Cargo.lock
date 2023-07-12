@@ -42,7 +42,7 @@ dependencies = [
 
 [[package]]
 name = "critcmp"
-version = "0.1.7"
+version = "0.1.8"
 dependencies = [
  "clap",
  "grep-cli",
