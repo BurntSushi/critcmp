@@ -116,6 +116,11 @@ pub fn columns<W: WriteColor>(
             continue;
         }
 
+        let show_throughput = columns
+            .iter()
+            .flat_map(|column_name| group.get(column_name))
+            .any(|b| b.throughput.is_some());
+
         write!(wtr, "{}", group.name)?;
         for column_name in &columns {
             let b = match group.get(column_name) {
@@ -131,12 +136,17 @@ pub fn columns<W: WriteColor>(
                 spec.set_fg(Some(Color::Green)).set_bold(true);
                 wtr.set_color(&spec)?;
             }
+            let t = if show_throughput {
+                throughput(b.throughput)
+            } else {
+                String::new()
+            };
             write!(
                 wtr,
                 "\t  {:<5.2} {:>14} {:>14}",
                 b.rank,
                 time(b.nanoseconds, b.stddev),
-                throughput(b.throughput),
+                t,
             )?;
             if b.best {
                 wtr.reset()?;
